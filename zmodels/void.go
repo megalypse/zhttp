@@ -1,3 +1,3 @@
-package models
+package zmodels
 
 type Void struct{}

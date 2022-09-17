@@ -9,17 +9,17 @@ import (
 	curl "net/url"
 	"strings"
 
-	"github.com/megalypse/zhttp/models"
+	"github.com/megalypse/zhttp/zmodels"
 )
 
-func MakeRequest[Response any, Request any](method string, request models.ZRequest[Request]) models.ZResponse[Response] {
+func MakeRequest[Response any, Request any](method string, request zmodels.ZRequest[Request]) zmodels.ZResponse[Response] {
 	responseHolder := new(Response)
 	client := http.Client{}
 
 	bodyBuffer, marshalErr := json.Marshal(request.Body)
 
 	if marshalErr != nil {
-		return models.MakeFailResponse[Response](marshalErr.Error(), nil)
+		return zmodels.MakeFailResponse[Response](marshalErr.Error(), nil)
 	}
 
 	httpRequest, _ := http.NewRequest(
@@ -37,23 +37,23 @@ func MakeRequest[Response any, Request any](method string, request models.ZReque
 	responseBuffer, readErr := io.ReadAll(httpResponse.Body)
 
 	if readErr != nil {
-		return models.MakeFailResponse[Response](marshalErr.Error(), nil)
+		return zmodels.MakeFailResponse[Response](marshalErr.Error(), nil)
 	}
 
 	unmarshalError := json.Unmarshal(responseBuffer, &responseHolder)
 
 	if unmarshalError != nil {
-		return models.MakeFailResponse[Response](unmarshalError.Error(), nil)
+		return zmodels.MakeFailResponse[Response](unmarshalError.Error(), nil)
 	}
 
-	return models.ZResponse[Response]{
+	return zmodels.ZResponse[Response]{
 		Content:   responseHolder,
 		Response:  httpResponse,
 		IsSuccess: true,
 	}
 }
 
-func parseUrl[T any](request models.ZRequest[T]) string {
+func parseUrl[T any](request zmodels.ZRequest[T]) string {
 	url := request.Url
 	urlParams := request.UrlParams
 	queryParams := request.QueryParams

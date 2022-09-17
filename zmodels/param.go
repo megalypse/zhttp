@@ -1,5 +1,5 @@
-package models
+package zmodels
 
 import "github.com/megalypse/zhttp/internal/models"
 
-type ZHeader models.KeyValue[string]
+type Param models.KeyValue[string]
