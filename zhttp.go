@@ -1,4 +1,4 @@
-package main
+package zhttp
 
 import (
 	iservices "github.com/megalypse/zhttp/internal/services"
