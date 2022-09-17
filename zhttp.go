@@ -1,8 +1,8 @@
 package main
 
 import (
-	imodels "github.com/megalypse/zhttp/internal/models"
 	iservices "github.com/megalypse/zhttp/internal/services"
+	imodels "github.com/megalypse/zhttp/models"
 
 	utils "github.com/megalypse/zhttp/internal"
 	"github.com/megalypse/zhttp/models"

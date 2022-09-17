@@ -9,7 +9,7 @@ import (
 	curl "net/url"
 	"strings"
 
-	"github.com/megalypse/zhttp/internal/models"
+	"github.com/megalypse/zhttp/models"
 )
 
 func MakeRequest[Response any, Request any](method string, request models.ZRequest[Request]) models.ZResponse[Response] {

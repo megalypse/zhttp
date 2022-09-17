@@ -3,21 +3,20 @@ package internal
 import (
 	"fmt"
 
-	imodels "github.com/megalypse/zhttp/internal/models"
 	"github.com/megalypse/zhttp/models"
 )
 
-func PrepareClientRequest[T any](client *models.ZHttpClient, request *imodels.ZRequest[T]) {
+func PrepareClientRequest[T any](client *models.ZHttpClient, request *models.ZRequest[T]) {
 	context := client.Context
 	request.Url = generateRequestUrl(context, request.Url)
 
 	authenticateRequest(client, request)
 }
 
-func authenticateRequest[T any](client *models.ZHttpClient, request *imodels.ZRequest[T]) {
+func authenticateRequest[T any](client *models.ZHttpClient, request *models.ZRequest[T]) {
 	if client.BearerToken != "" {
 		authorizationString := fmt.Sprintf("Bearer %v", client.BearerToken)
-		request.Headers = append(request.Headers, imodels.ZHeader{
+		request.Headers = append(request.Headers, models.ZHeader{
 			Key:   "Authorization",
 			Value: authorizationString,
 		})
