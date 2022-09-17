@@ -1,11 +1,11 @@
-package pkg
+package main
 
 import (
 	imodels "github.com/megalypse/zhttp/internal/models"
 	iservices "github.com/megalypse/zhttp/internal/services"
 
 	utils "github.com/megalypse/zhttp/internal"
-	models "github.com/megalypse/zhttp/models"
+	"github.com/megalypse/zhttp/models"
 )
 
 func Get[Response any, Request any](request imodels.ZRequest[Request]) imodels.ZResponse[Response] {

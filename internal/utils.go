@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	imodels "github.com/megalypse/zhttp/internal/models"
-	"github.com/megalypse/zhttp/pkg/models"
+	"github.com/megalypse/zhttp/models"
 )
 
 func PrepareClientRequest[T any](client *models.ZHttpClient, request *imodels.ZRequest[T]) {
