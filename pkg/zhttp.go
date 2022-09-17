@@ -16,7 +16,7 @@ func Post[Response any, Request any](request imodels.ZRequest[Request]) imodels.
 }
 
 func Patch[Response any, Request any](request imodels.ZRequest[Request]) imodels.ZResponse[Response] {
-	return iservices.MakeRequest[Response]("PATCH]", request)
+	return iservices.MakeRequest[Response]("PATCH", request)
 }
 
 func Put[Response any, Request any](request imodels.ZRequest[Request]) imodels.ZResponse[Response] {
