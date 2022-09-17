@@ -11,7 +11,7 @@ import (
 	"github.com/megalypse/zhttp/internal/models"
 )
 
-func makeRequest[Response any, Request any](method string, request models.ZRequest[Request]) models.ZResponse[Response] {
+func MakeRequest[Response any, Request any](method string, request models.ZRequest[Request]) models.ZResponse[Response] {
 	responseHolder := new(Response)
 	client := http.Client{}
 
