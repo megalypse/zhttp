@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	curl "net/url"
 	"strings"
 
 	"github.com/megalypse/zhttp/internal/models"
@@ -59,7 +60,8 @@ func parseUrl[T any](request models.ZRequest[T]) string {
 
 	for _, param := range urlParams {
 		paramInterpolation := fmt.Sprintf("{%v}", param.Key)
-		strings.ReplaceAll(url, paramInterpolation, param.Value)
+
+		url = strings.ReplaceAll(url, paramInterpolation, param.Value)
 	}
 
 	urlLastIndex := len(url) - 1
@@ -78,6 +80,7 @@ func parseUrl[T any](request models.ZRequest[T]) string {
 		}
 
 		param += fmt.Sprintf("%v=%v", v.Key, v.Value)
+		param = curl.QueryEscape(param)
 
 		url += param
 	}
