@@ -7,7 +7,7 @@ import (
 	"github.com/megalypse/zhttp/models"
 )
 
-func PrepareClientRequest[T any](client *models.ZHttpClient, request *models.ZRequest[T]) {
+func PrepareClientRequest[T any](client *models.ZClient, request *models.ZRequest[T]) {
 	context := client.Context
 	request.Url = generateRequestUrl(context, request.Url)
 
@@ -18,7 +18,7 @@ func MakeFailResponse[T any](message string, httpResponse *http.Response) models
 	return makeResponse[T](nil, httpResponse, false, message)
 }
 
-func authenticateRequest[T any](client *models.ZHttpClient, request *models.ZRequest[T]) {
+func authenticateRequest[T any](client *models.ZClient, request *models.ZRequest[T]) {
 	if client.BearerToken != "" {
 		authorizationString := fmt.Sprintf("Bearer %v", client.BearerToken)
 		request.Headers = append(request.Headers, models.ZHeader{

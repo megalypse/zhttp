@@ -1,6 +1,6 @@
 package models
 
-type ZHttpClient struct {
+type ZClient struct {
 	Context     string
 	BearerToken string
 }

@@ -28,7 +28,7 @@ func Delete[Response any, Request any](request models.ZRequest[Request]) models.
 }
 
 func ClientGet[Response any, Request any](
-	client models.ZHttpClient,
+	client models.ZClient,
 	request models.ZRequest[Request],
 ) models.ZResponse[Response] {
 	utils.PrepareClientRequest(&client, &request)
@@ -37,7 +37,7 @@ func ClientGet[Response any, Request any](
 }
 
 func ClientPost[Response any, Request any](
-	client models.ZHttpClient,
+	client models.ZClient,
 	request models.ZRequest[Request],
 ) models.ZResponse[Response] {
 	utils.PrepareClientRequest(&client, &request)
@@ -46,7 +46,7 @@ func ClientPost[Response any, Request any](
 }
 
 func ClientPatch[Response any, Request any](
-	client models.ZHttpClient,
+	client models.ZClient,
 	request models.ZRequest[Request],
 ) models.ZResponse[Response] {
 	utils.PrepareClientRequest(&client, &request)
@@ -55,7 +55,7 @@ func ClientPatch[Response any, Request any](
 }
 
 func ClientPut[Response any, Request any](
-	client models.ZHttpClient,
+	client models.ZClient,
 	request models.ZRequest[Request],
 ) models.ZResponse[Response] {
 	utils.PrepareClientRequest(&client, &request)
@@ -64,7 +64,7 @@ func ClientPut[Response any, Request any](
 }
 
 func ClientDelete[Response any, Request any](
-	client models.ZHttpClient,
+	client models.ZClient,
 	request models.ZRequest[Request],
 ) models.ZResponse[Response] {
 	utils.PrepareClientRequest(&client, &request)
