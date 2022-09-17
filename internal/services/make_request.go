@@ -1,4 +1,4 @@
-package internal
+package internal_services
 
 import (
 	"bytes"
@@ -84,24 +84,3 @@ func parseUrl[T any](request models.ZRequest[T]) string {
 
 	return url
 }
-
-// func generateRequestUrl[T any](request models.ZRequest[T]) string {
-// 	if request.Url != nil {
-// 		return *request.Url
-// 	}
-
-// 	context := request.Context
-// 	uri := request.Uri
-
-// 	contextLastIndex := len(context) - 1
-
-// 	if string(context[contextLastIndex]) == "/" {
-// 		context = context[:contextLastIndex]
-// 	}
-
-// 	if string(uri[0]) != "/" {
-// 		uri = "/" + uri
-// 	}
-
-// 	return context + uri
-// }
