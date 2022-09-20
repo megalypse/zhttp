@@ -26,7 +26,7 @@ func ParseUrl[T any](request models.ZRequest[T]) string {
 
 	for key, value := range urlParams {
 		curlyBracketsParam := fmt.Sprintf("{%v}", key)
-		colonParam := fmt.Sprintf("{%v}", key)
+		colonParam := fmt.Sprintf(":%v", key)
 
 		uri = strings.ReplaceAll(uri, curlyBracketsParam, value)
 		uri = strings.ReplaceAll(uri, colonParam, value)
@@ -40,17 +40,25 @@ func ParseUrl[T any](request models.ZRequest[T]) string {
 
 	uri += "?"
 
-	for i, v := range queryParams {
-		var param string
+	isFirstParam := true
+	for key, valueList := range queryParams {
 
-		if i > 0 {
-			param += "&"
+		for _, value := range valueList {
+			var param string
+
+			if !isFirstParam {
+				param += "&"
+				isFirstParam = false
+			}
+
+			param += fmt.Sprintf("%v=%v", key, value)
+			param = url.QueryEscape(param)
+			uri += param
 		}
 
-		param += fmt.Sprintf("%v=%v", v.Key, v.Value)
-		param = url.QueryEscape(param)
-
-		uri += param
+		if isFirstParam {
+			isFirstParam = false
+		}
 	}
 
 	return uri

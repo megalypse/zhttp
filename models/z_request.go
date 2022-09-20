@@ -5,5 +5,5 @@ type ZRequest[T any] struct {
 	Headers     map[string]string
 	Body        T
 	UrlParams   map[string]string
-	QueryParams []QueryParam
+	QueryParams map[string][]string
 }
