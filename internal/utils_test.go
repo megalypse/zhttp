@@ -16,6 +16,43 @@ func TestGenerateRequestUrl(t *testing.T) {
 	if result != expected {
 		t.Errorf("Unexpected behavior on parsing. Expected %q, got %q.", expected, result)
 	}
+
+	context = "http://test.com"
+	uri = "/v1/users"
+
+	result2 := generateRequestUrl(context, uri)
+
+	if result2 != expected {
+		t.Errorf("Unexpected behavior on parsing. Expected %q, got %q.", expected, result)
+	}
+
+	context = "http://test.com/"
+	uri = "v1/users"
+
+	result3 := generateRequestUrl(context, uri)
+
+	if result3 != expected {
+		t.Errorf("Unexpected behavior on parsing. Expected %q, got %q.", expected, result)
+	}
+
+	context = "http://test.com"
+	uri = "v1/users"
+
+	result4 := generateRequestUrl(context, uri)
+
+	if result4 != expected {
+		t.Errorf("Unexpected behavior on parsing. Expected %q, got %q.", expected, result)
+	}
+
+	context = "http://test.com//"
+	uri = "v1/users"
+
+	result5 := generateRequestUrl(context, uri)
+	expectedDefective := "http://test.com//v1/users"
+
+	if result5 != expectedDefective {
+		t.Errorf("Unexpected behavior on parsing. Expected %q, got %q.", expected, result)
+	}
 }
 
 func TestParseUrl(t *testing.T) {
