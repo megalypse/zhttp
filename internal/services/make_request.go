@@ -17,7 +17,7 @@ func MakeRequest[Response any, Request any](method string, request models.ZReque
 	bodyBuffer, marshalErr := json.Marshal(request.Body)
 
 	if marshalErr != nil {
-		return models.MakeFailResponse[Response](marshalErr.Error(), nil)
+		return utils.MakeFailResponse[Response](marshalErr.Error(), nil)
 	}
 
 	httpRequest, _ := http.NewRequest(
@@ -35,13 +35,13 @@ func MakeRequest[Response any, Request any](method string, request models.ZReque
 	responseBuffer, readErr := io.ReadAll(httpResponse.Body)
 
 	if readErr != nil {
-		return models.MakeFailResponse[Response](marshalErr.Error(), nil)
+		return utils.MakeFailResponse[Response](marshalErr.Error(), nil)
 	}
 
 	unmarshalError := json.Unmarshal(responseBuffer, &responseHolder)
 
 	if unmarshalError != nil {
-		return models.MakeFailResponse[Response](unmarshalError.Error(), nil)
+		return utils.MakeFailResponse[Response](unmarshalError.Error(), nil)
 	}
 
 	return models.ZResponse[Response]{
