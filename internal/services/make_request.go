@@ -3,12 +3,10 @@ package services
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
-	curl "net/url"
-	"strings"
 
+	utils "github.com/megalypse/zhttp/internal"
 	"github.com/megalypse/zhttp/models"
 )
 
@@ -24,12 +22,12 @@ func MakeRequest[Response any, Request any](method string, request models.ZReque
 
 	httpRequest, _ := http.NewRequest(
 		method,
-		parseUrl(request),
+		utils.ParseUrl(request),
 		bytes.NewBuffer(bodyBuffer),
 	)
 
-	for _, header := range request.Headers {
-		httpRequest.Header.Set(header.Key, header.Value)
+	for key, value := range request.Headers {
+		httpRequest.Header.Set(key, value)
 	}
 
 	httpResponse, _ := client.Do(httpRequest)
@@ -51,39 +49,4 @@ func MakeRequest[Response any, Request any](method string, request models.ZReque
 		Response:  httpResponse,
 		IsSuccess: true,
 	}
-}
-
-func parseUrl[T any](request models.ZRequest[T]) string {
-	url := request.Url
-	urlParams := request.UrlParams
-	queryParams := request.QueryParams
-
-	for _, param := range urlParams {
-		paramInterpolation := fmt.Sprintf("{%v}", param.Key)
-
-		url = strings.ReplaceAll(url, paramInterpolation, param.Value)
-	}
-
-	urlLastIndex := len(url) - 1
-
-	if string(url[urlLastIndex]) == "/" {
-		url = url[:urlLastIndex]
-	}
-
-	url += "?"
-
-	for i, v := range queryParams {
-		var param string
-
-		if i > 0 {
-			param += "&"
-		}
-
-		param += fmt.Sprintf("%v=%v", v.Key, v.Value)
-		param = curl.QueryEscape(param)
-
-		url += param
-	}
-
-	return url
 }
