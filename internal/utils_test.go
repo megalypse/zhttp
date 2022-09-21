@@ -6,53 +6,17 @@ import (
 	"github.com/megalypse/zhttp/models"
 )
 
-func TestGenerateRequestUrl(t *testing.T) {
-	context := "http://test.com/"
-	uri := "/v1/users"
+var test *testing.T
 
-	result := generateRequestUrl(context, uri)
+func TestGenerateRequestUrl(t *testing.T) {
 	expected := "http://test.com/v1/users"
 
-	if result != expected {
-		t.Errorf("Unexpected behavior on parsing. Expected %q, got %q.", expected, result)
-	}
+	testUrlGeneration("http://test.com/", "/v1/users", expected)
+	testUrlGeneration("http://test.com", "/v1/users", expected)
+	testUrlGeneration("http://test.com/", "v1/users", expected)
+	testUrlGeneration("http://test.com", "v1/users", expected)
 
-	context = "http://test.com"
-	uri = "/v1/users"
-
-	result2 := generateRequestUrl(context, uri)
-
-	if result2 != expected {
-		t.Errorf("Unexpected behavior on parsing. Expected %q, got %q.", expected, result)
-	}
-
-	context = "http://test.com/"
-	uri = "v1/users"
-
-	result3 := generateRequestUrl(context, uri)
-
-	if result3 != expected {
-		t.Errorf("Unexpected behavior on parsing. Expected %q, got %q.", expected, result)
-	}
-
-	context = "http://test.com"
-	uri = "v1/users"
-
-	result4 := generateRequestUrl(context, uri)
-
-	if result4 != expected {
-		t.Errorf("Unexpected behavior on parsing. Expected %q, got %q.", expected, result)
-	}
-
-	context = "http://test.com//"
-	uri = "v1/users"
-
-	result5 := generateRequestUrl(context, uri)
-	expectedDefective := "http://test.com//v1/users"
-
-	if result5 != expectedDefective {
-		t.Errorf("Unexpected behavior on parsing. Expected %q, got %q.", expected, result)
-	}
+	testUrlGeneration("http://test.com//", "v1/users", "http://test.com//v1/users")
 }
 
 func TestParseUrl(t *testing.T) {
@@ -74,5 +38,14 @@ func TestParseUrl(t *testing.T) {
 	if result != expectedUrl {
 		t.Errorf("Unexpected behavior on parsing. Expected %q, got %q.", expectedUrl, result)
 
+	}
+}
+
+func testUrlGeneration(host, uri, expected string) {
+
+	result := generateRequestUrl(host, uri)
+
+	if result != expected {
+		test.Errorf("Unexpected behavior on parsing. Expected %q, got %q.", expected, result)
 	}
 }
