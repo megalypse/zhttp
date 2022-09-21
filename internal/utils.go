@@ -10,15 +10,21 @@ import (
 	"github.com/megalypse/zhttp/models"
 )
 
+// This function do everything that is needed to the URL url before it is ready
+// to be used.
 func PrepareClientRequest[T any](client *models.ZClient, request *models.ZRequest[T]) {
 	context := client.Context
 	request.Url = generateRequestUrl(context, request.Url)
 }
 
+// This function makes a ZResponse value enforcing an error template.
 func MakeFailResponse[T any](message string, httpResponse *http.Response) models.ZResponse[T] {
 	return makeResponse[T](nil, httpResponse, false, message)
 }
 
+// It takes the UrlParams and QueryParams maps to generate the parsed string
+// with the url params replaced by its values and the query params appended
+// to the end of the string.
 func ParseUrl[T any](request models.ZRequest[T]) string {
 	uri := request.Url
 	urlParams := request.UrlParams
@@ -64,6 +70,8 @@ func ParseUrl[T any](request models.ZRequest[T]) string {
 	return uri
 }
 
+// It takes a host URL and an URI and put them together to form
+// a valid URL.
 func generateRequestUrl(context, uri string) string {
 	contextLastIndex := len(context) - 1
 
