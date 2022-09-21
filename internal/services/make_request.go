@@ -7,13 +7,13 @@ import (
 	"net/http"
 
 	utils "github.com/megalypse/zhttp/internal"
-	"github.com/megalypse/zhttp/models"
+	"github.com/megalypse/zhttp/zmodels"
 )
 
 // Response can be of any desired type.
 // Request can also be of any type.
 // `MakeRequest` uses "encoding/json" lib, so feel free to use struct tagging on your response and request types
-func MakeRequest[Response any, Request any](method string, request models.ZRequest[Request]) models.ZResponse[Response] {
+func MakeRequest[Response any, Request any](method string, request zmodels.ZRequest[Request]) zmodels.ZResponse[Response] {
 	responseHolder := new(Response)
 	client := http.Client{}
 
@@ -48,7 +48,7 @@ func MakeRequest[Response any, Request any](method string, request models.ZReque
 	}
 
 	statusCode := httpResponse.StatusCode
-	return models.ZResponse[Response]{
+	return zmodels.ZResponse[Response]{
 		Content:   responseHolder,
 		Response:  httpResponse,
 		IsSuccess: statusCode >= 200 && statusCode < 300,
