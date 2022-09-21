@@ -1,4 +1,4 @@
-package models
+package zmodels
 
 import "net/http"
 

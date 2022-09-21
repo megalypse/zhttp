@@ -7,25 +7,25 @@ import (
 
 	"net/url"
 
-	"github.com/megalypse/zhttp/models"
+	"github.com/megalypse/zhttp/zmodels"
 )
 
 // This function do everything that is needed to the URL url before it is ready
 // to be used.
-func PrepareClientRequest[T any](client *models.ZClient, request *models.ZRequest[T]) {
+func PrepareClientRequest[T any](client *zmodels.ZClient, request *zmodels.ZRequest[T]) {
 	context := client.Context
 	request.Url = generateRequestUrl(context, request.Url)
 }
 
 // This function makes a ZResponse value enforcing an error template.
-func MakeFailResponse[T any](message string, httpResponse *http.Response) models.ZResponse[T] {
+func MakeFailResponse[T any](message string, httpResponse *http.Response) zmodels.ZResponse[T] {
 	return makeResponse[T](nil, httpResponse, false, message)
 }
 
 // It takes the UrlParams and QueryParams maps to generate the parsed string
 // with the url params replaced by its values and the query params appended
 // to the end of the string.
-func ParseUrl[T any](request models.ZRequest[T]) string {
+func ParseUrl[T any](request zmodels.ZRequest[T]) string {
 	uri := request.Url
 	urlParams := request.UrlParams
 	queryParams := request.QueryParams
@@ -91,8 +91,8 @@ func makeResponse[T any](
 	response *http.Response,
 	isSuccess bool,
 	errorMessage string,
-) models.ZResponse[T] {
-	return models.ZResponse[T]{
+) zmodels.ZResponse[T] {
+	return zmodels.ZResponse[T]{
 		Content:      content,
 		Response:     response,
 		IsSuccess:    isSuccess,
