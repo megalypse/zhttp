@@ -10,6 +10,9 @@ import (
 	"github.com/megalypse/zhttp/models"
 )
 
+// Response can be of any desired type.
+// Request can also be of any type.
+// `MakeRequest` uses "encoding/json" lib, so feel free to use struct tagging on your response and request types
 func MakeRequest[Response any, Request any](method string, request models.ZRequest[Request]) models.ZResponse[Response] {
 	responseHolder := new(Response)
 	client := http.Client{}
