@@ -3,31 +3,75 @@ package internal
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
-	"github.com/megalypse/zhttp/zmodels"
+	"net/url"
+
+	"github.com/megalypse/zhttp/models"
 )
 
-func PrepareClientRequest[T any](client *zmodels.ZClient, request *zmodels.ZRequest[T]) {
+// This function do everything that is needed to the URL url before it is ready
+// to be used.
+func PrepareClientRequest[T any](client *models.ZClient, request *models.ZRequest[T]) {
 	context := client.Context
 	request.Url = generateRequestUrl(context, request.Url)
-
-	authenticateRequest(client, request)
 }
 
-func MakeFailResponse[T any](message string, httpResponse *http.Response) zmodels.ZResponse[T] {
+// This function makes a ZResponse value enforcing an error template.
+func MakeFailResponse[T any](message string, httpResponse *http.Response) models.ZResponse[T] {
 	return makeResponse[T](nil, httpResponse, false, message)
 }
 
-func authenticateRequest[T any](client *zmodels.ZClient, request *zmodels.ZRequest[T]) {
-	if client.BearerToken != "" {
-		authorizationString := fmt.Sprintf("Bearer %v", client.BearerToken)
-		request.Headers = append(request.Headers, zmodels.ZHeader{
-			Key:   "Authorization",
-			Value: authorizationString,
-		})
+// It takes the UrlParams and QueryParams maps to generate the parsed string
+// with the url params replaced by its values and the query params appended
+// to the end of the string.
+func ParseUrl[T any](request models.ZRequest[T]) string {
+	uri := request.Url
+	urlParams := request.UrlParams
+	queryParams := request.QueryParams
+
+	for key, value := range urlParams {
+		curlyBracketsParam := fmt.Sprintf("{%v}", key)
+		colonParam := fmt.Sprintf(":%v", key)
+
+		uri = strings.ReplaceAll(uri, curlyBracketsParam, value)
+		uri = strings.ReplaceAll(uri, colonParam, value)
 	}
+
+	urlLastIndex := len(uri) - 1
+
+	if string(uri[urlLastIndex]) == "/" {
+		uri = uri[:urlLastIndex]
+	}
+
+	uri += "?"
+
+	isFirstParam := true
+	for key, valueList := range queryParams {
+
+		for _, value := range valueList {
+			var param string
+
+			if !isFirstParam {
+				param += "&"
+				isFirstParam = false
+			}
+
+			param += fmt.Sprintf("%v=%v", key, value)
+			param = url.QueryEscape(param)
+			uri += param
+		}
+
+		if isFirstParam {
+			isFirstParam = false
+		}
+	}
+
+	return uri
 }
 
+// It takes a host URL and an URI and put them together to form
+// a valid URL.
 func generateRequestUrl(context, uri string) string {
 	contextLastIndex := len(context) - 1
 
@@ -47,8 +91,8 @@ func makeResponse[T any](
 	response *http.Response,
 	isSuccess bool,
 	errorMessage string,
-) zmodels.ZResponse[T] {
-	return zmodels.ZResponse[T]{
+) models.ZResponse[T] {
+	return models.ZResponse[T]{
 		Content:      content,
 		Response:     response,
 		IsSuccess:    isSuccess,
