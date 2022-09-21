@@ -2,25 +2,30 @@ package zhttp
 
 import (
 	"github.com/megalypse/zhttp/internal/services"
-	imodels "github.com/megalypse/zhttp/models"
+	"github.com/megalypse/zhttp/models"
 )
 
-func Get[Response any, Request any](request imodels.ZRequest[Request]) imodels.ZResponse[Response] {
+// This function is just a wrapper enforcing the GET method on MakeRequest function
+func Get[Response any, Request any](request models.ZRequest[Request]) models.ZResponse[Response] {
 	return services.MakeRequest[Response]("GET", request)
 }
 
-func Post[Response any, Request any](request imodels.ZRequest[Request]) imodels.ZResponse[Response] {
+// This function is just a wrapper enforcing the POST method on MakeRequest function
+func Post[Response any, Request any](request models.ZRequest[Request]) models.ZResponse[Response] {
 	return services.MakeRequest[Response]("POST", request)
 }
 
-func Patch[Response any, Request any](request imodels.ZRequest[Request]) imodels.ZResponse[Response] {
+// This function is just a wrapper enforcing the PATCH method on MakeRequest function
+func Patch[Response any, Request any](request models.ZRequest[Request]) models.ZResponse[Response] {
 	return services.MakeRequest[Response]("PATCH", request)
 }
 
-func Put[Response any, Request any](request imodels.ZRequest[Request]) imodels.ZResponse[Response] {
+// This function is just a wrapper enforcing the PUT method on MakeRequest function
+func Put[Response any, Request any](request models.ZRequest[Request]) models.ZResponse[Response] {
 	return services.MakeRequest[Response]("PUT", request)
 }
 
-func Delete[Response any, Request any](request imodels.ZRequest[Request]) imodels.ZResponse[Response] {
+// This function is just a wrapper enforcing the DELETE method on MakeRequest function
+func Delete[Response any, Request any](request models.ZRequest[Request]) models.ZResponse[Response] {
 	return services.MakeRequest[Response]("DELETE", request)
 }
