@@ -2,8 +2,8 @@ package models
 
 type ZRequest[T any] struct {
 	Url         string
-	Headers     []ZHeader
+	Headers     map[string]string
 	Body        T
-	UrlParams   []Param
-	QueryParams []Param
+	UrlParams   map[string]string
+	QueryParams map[string][]string
 }
