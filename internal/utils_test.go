@@ -3,7 +3,7 @@ package internal
 import (
 	"testing"
 
-	"github.com/megalypse/zhttp/models"
+	"github.com/megalypse/zhttp/zmodels"
 )
 
 var test *testing.T
@@ -20,7 +20,7 @@ func TestGenerateRequestUrl(t *testing.T) {
 }
 
 func TestParseUrl(t *testing.T) {
-	request := models.ZRequest[string]{
+	request := zmodels.ZRequest[string]{
 		Url: "http://test.com/v1/users/{userId}/:addressId",
 		UrlParams: map[string]string{
 			"userId":    "1",

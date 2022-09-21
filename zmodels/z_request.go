@@ -1,4 +1,4 @@
-package models
+package zmodels
 
 type ZRequest[T any] struct {
 	Url         string
