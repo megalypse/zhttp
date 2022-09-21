@@ -6,6 +6,8 @@ import (
 	"github.com/megalypse/zhttp/models"
 )
 
+// TODO: add client and on-fly interceptors merging system
+
 func ClientGet[Response any, Request any](
 	client models.ZClient,
 	request models.ZRequest[Request],
