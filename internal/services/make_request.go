@@ -47,9 +47,10 @@ func MakeRequest[Response any, Request any](method string, request models.ZReque
 		return utils.MakeFailResponse[Response](unmarshalError.Error(), nil)
 	}
 
+	statusCode := httpResponse.StatusCode
 	return models.ZResponse[Response]{
 		Content:   responseHolder,
 		Response:  httpResponse,
-		IsSuccess: true,
+		IsSuccess: statusCode >= 200 && statusCode < 300,
 	}
 }
