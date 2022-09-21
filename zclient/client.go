@@ -7,7 +7,7 @@ import (
 )
 
 // Get function that uses predermined data from the given client
-func ClientGet[Response any, Request any](
+func Get[Response any, Request any](
 	client models.ZClient,
 	request models.ZRequest[Request],
 ) models.ZResponse[Response] {
@@ -17,7 +17,7 @@ func ClientGet[Response any, Request any](
 }
 
 // Post function that makes the request using basic information from the given client
-func ClientPost[Response any, Request any](
+func Post[Response any, Request any](
 	client models.ZClient,
 	request models.ZRequest[Request],
 ) models.ZResponse[Response] {
@@ -26,7 +26,7 @@ func ClientPost[Response any, Request any](
 	return zhttp.Post[Response](request)
 }
 
-func ClientPatch[Response any, Request any](
+func Patch[Response any, Request any](
 	client models.ZClient,
 	request models.ZRequest[Request],
 ) models.ZResponse[Response] {
@@ -35,7 +35,7 @@ func ClientPatch[Response any, Request any](
 	return zhttp.Patch[Response](request)
 }
 
-func ClientPut[Response any, Request any](
+func Put[Response any, Request any](
 	client models.ZClient,
 	request models.ZRequest[Request],
 ) models.ZResponse[Response] {
@@ -44,7 +44,7 @@ func ClientPut[Response any, Request any](
 	return zhttp.Put[Response](request)
 }
 
-func ClientDelete[Response any, Request any](
+func Delete[Response any, Request any](
 	client models.ZClient,
 	request models.ZRequest[Request],
 ) models.ZResponse[Response] {
