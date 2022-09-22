@@ -50,16 +50,23 @@ func defaultBehavior[Response any, Request any](method string, request zmodels.Z
 	responseHolder := new(Response)
 	client := http.Client{}
 
-	bodyBuffer, marshalErr := json.Marshal(request.Body)
+	var bodyB []byte
+	if request.ShouldMarshal {
+		bodyBuffer, marshalErr := json.Marshal(request.Body)
 
-	if marshalErr != nil {
-		return utils.MakeFailResponse[Response](marshalErr.Error(), nil)
+		if marshalErr != nil {
+			return utils.MakeFailResponse[Response](marshalErr.Error(), nil)
+		}
+
+		bodyB = bodyBuffer
+	} else {
+		bodyB = any(request.Body).([]byte)
 	}
 
 	httpRequest, _ := http.NewRequest(
 		method,
 		utils.ParseUrl(request),
-		bytes.NewBuffer(bodyBuffer),
+		bytes.NewBuffer(bodyB),
 	)
 
 	for key, value := range request.Headers {
@@ -71,7 +78,7 @@ func defaultBehavior[Response any, Request any](method string, request zmodels.Z
 	responseBuffer, readErr := io.ReadAll(httpResponse.Body)
 
 	if readErr != nil {
-		return utils.MakeFailResponse[Response](marshalErr.Error(), nil)
+		return utils.MakeFailResponse[Response](readErr.Error(), nil)
 	}
 
 	unmarshalError := json.Unmarshal(responseBuffer, &responseHolder)
