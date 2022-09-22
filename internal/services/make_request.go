@@ -14,6 +14,39 @@ import (
 // Request can also be of any type.
 // `MakeRequest` uses "encoding/json" lib, so feel free to use struct tagging on your response and request types
 func MakeRequest[Response any, Request any](method string, request zmodels.ZRequest[Request]) zmodels.ZResponse[Response] {
+	if method == "POSTFORM" {
+		converted := any(request).(zmodels.ZRequest[map[string][]string])
+		return postFormBehavior[Response](converted)
+	} else {
+		return defaultBehavior[Response](method, request)
+	}
+}
+
+func postFormBehavior[Response any](request zmodels.ZRequest[map[string][]string]) zmodels.ZResponse[Response] {
+	responseHolder := new(Response)
+	res, err := http.PostForm(request.Url, request.Body)
+
+	if err != nil {
+		return utils.MakeFailResponse[Response](err.Error(), res)
+	}
+
+	body, err := io.ReadAll(res.Body)
+
+	if err != nil {
+		return utils.MakeFailResponse[Response](err.Error(), res)
+	}
+
+	json.Unmarshal(body, &responseHolder)
+
+	statusCode := res.StatusCode
+	return zmodels.ZResponse[Response]{
+		Content:   responseHolder,
+		Response:  res,
+		IsSuccess: statusCode >= 200 && statusCode < 300,
+	}
+}
+
+func defaultBehavior[Response any, Request any](method string, request zmodels.ZRequest[Request]) zmodels.ZResponse[Response] {
 	responseHolder := new(Response)
 	client := http.Client{}
 
