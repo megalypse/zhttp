@@ -15,6 +15,11 @@ func Post[Response any, Request any](request zmodels.ZRequest[Request]) zmodels.
 	return services.MakeRequest[Response]("POST", request)
 }
 
+// This function is just a wrapper enforcing the POST method on MakeRequest function
+func PostForm[Response any](request zmodels.ZRequest[map[string][]string]) zmodels.ZResponse[Response] {
+	return services.MakeRequest[Response]("POSTFORM", request)
+}
+
 // This function is just a wrapper enforcing the PATCH method on MakeRequest function
 func Patch[Response any, Request any](request zmodels.ZRequest[Request]) zmodels.ZResponse[Response] {
 	return services.MakeRequest[Response]("PATCH", request)

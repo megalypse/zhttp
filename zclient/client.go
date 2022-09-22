@@ -26,6 +26,15 @@ func Post[Response any, Request any](
 	return zhttp.Post[Response](request)
 }
 
+func PostForm[Response any](
+	client zmodels.ZClient,
+	request zmodels.ZRequest[map[string][]string],
+) zmodels.ZResponse[Response] {
+	utils.PrepareClientRequest(&client, &request)
+
+	return zhttp.PostForm[Response](request)
+}
+
 func Patch[Response any, Request any](
 	client zmodels.ZClient,
 	request zmodels.ZRequest[Request],
