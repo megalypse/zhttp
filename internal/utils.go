@@ -15,6 +15,7 @@ import (
 func PrepareClientRequest[T any](client *zmodels.ZClient, request *zmodels.ZRequest[T]) {
 	context := client.Context
 	request.Url = generateRequestUrl(context, request.Url)
+	request.Headers = prepareRequestHeaders(client, request)
 }
 
 // This function makes a ZResponse value enforcing an error template.
@@ -98,4 +99,21 @@ func makeResponse[T any](
 		IsSuccess:    isSuccess,
 		ErrorMessage: errorMessage,
 	}
+}
+
+func prepareRequestHeaders[T any](client *zmodels.ZClient, request *zmodels.ZRequest[T]) map[string]string {
+	clientHeadersSize := len(client.Headers)
+	requestHeadersSize := len(request.Headers)
+
+	newHeaders := make(map[string]string, clientHeadersSize+requestHeadersSize)
+
+	for k, v := range client.Headers {
+		newHeaders[k] = v
+	}
+
+	for k, v := range request.Headers {
+		newHeaders[k] = v
+	}
+
+	return newHeaders
 }
