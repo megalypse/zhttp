@@ -50,23 +50,31 @@ func defaultBehavior[Response any, Request any](method string, request zmodels.Z
 	responseHolder := new(Response)
 	client := http.Client{}
 
-	var bodyB []byte
-	if request.ShouldMarshal {
+	var shouldMarshal bool
+
+	if request.ShouldMarshal == nil {
+		shouldMarshal = true
+	} else {
+		shouldMarshal = *request.ShouldMarshal
+	}
+
+	var bytesBody []byte
+	if shouldMarshal {
 		bodyBuffer, marshalErr := json.Marshal(request.Body)
 
 		if marshalErr != nil {
 			return utils.MakeFailResponse[Response](marshalErr.Error(), nil)
 		}
 
-		bodyB = bodyBuffer
+		bytesBody = bodyBuffer
 	} else {
-		bodyB = any(request.Body).([]byte)
+		bytesBody = any(request.Body).([]byte)
 	}
 
 	httpRequest, _ := http.NewRequest(
 		method,
 		utils.ParseUrl(request),
-		bytes.NewBuffer(bodyB),
+		bytes.NewBuffer(bytesBody),
 	)
 
 	for key, value := range request.Headers {

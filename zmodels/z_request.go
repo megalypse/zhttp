@@ -6,5 +6,5 @@ type ZRequest[T any] struct {
 	Body          T
 	UrlParams     map[string]string
 	QueryParams   map[string][]string
-	ShouldMarshal bool
+	ShouldMarshal *bool
 }
