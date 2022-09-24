@@ -51,7 +51,9 @@ func defaultBehavior[Response any, Request any](method string, request zmodels.Z
 	client := http.Client{}
 
 	var bytesBody []byte
-	if !request.IsBytesBody {
+	if request.IsBytesBody {
+		bytesBody = any(request.Body).([]byte)
+	} else {
 		bodyBuffer, marshalErr := json.Marshal(request.Body)
 
 		if marshalErr != nil {
@@ -59,8 +61,6 @@ func defaultBehavior[Response any, Request any](method string, request zmodels.Z
 		}
 
 		bytesBody = bodyBuffer
-	} else {
-		bytesBody = any(request.Body).([]byte)
 	}
 
 	httpRequest, _ := http.NewRequest(
