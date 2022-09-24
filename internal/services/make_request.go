@@ -50,16 +50,8 @@ func defaultBehavior[Response any, Request any](method string, request zmodels.Z
 	responseHolder := new(Response)
 	client := http.Client{}
 
-	var shouldMarshal bool
-
-	if request.ShouldMarshal == nil {
-		shouldMarshal = true
-	} else {
-		shouldMarshal = *request.ShouldMarshal
-	}
-
 	var bytesBody []byte
-	if shouldMarshal {
+	if !request.IsBytesBody {
 		bodyBuffer, marshalErr := json.Marshal(request.Body)
 
 		if marshalErr != nil {
