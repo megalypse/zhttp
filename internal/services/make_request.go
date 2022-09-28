@@ -12,7 +12,7 @@ import (
 
 // Response can be of any desired type.
 // Request can also be of any type.
-// `MakeRequest` uses "encoding/json" lib, so feel free to use struct tagging on your response and request types
+// `MakeRequest` uses "encoding/json" lib, so feel free to use struct tagging on your response and request types.
 func MakeRequest[Response any, Request any](method string, request zmodels.ZRequest[Request]) zmodels.ZResponse[Response] {
 	if method == "POSTFORM" {
 		converted := any(request).(zmodels.ZRequest[map[string][]string])
@@ -50,23 +50,23 @@ func defaultBehavior[Response any, Request any](method string, request zmodels.Z
 	responseHolder := new(Response)
 	client := http.Client{}
 
-	var bodyB []byte
-	if request.ShouldMarshal {
+	var bytesBody []byte
+	if request.IsBytesBody {
+		bytesBody = any(request.Body).([]byte)
+	} else {
 		bodyBuffer, marshalErr := json.Marshal(request.Body)
 
 		if marshalErr != nil {
 			return utils.MakeFailResponse[Response](marshalErr.Error(), nil)
 		}
 
-		bodyB = bodyBuffer
-	} else {
-		bodyB = any(request.Body).([]byte)
+		bytesBody = bodyBuffer
 	}
 
 	httpRequest, _ := http.NewRequest(
 		method,
 		utils.ParseUrl(request),
-		bytes.NewBuffer(bodyB),
+		bytes.NewBuffer(bytesBody),
 	)
 
 	for key, value := range request.Headers {

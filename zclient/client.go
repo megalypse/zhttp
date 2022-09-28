@@ -8,56 +8,56 @@ import (
 
 // Get function that uses predermined data from the given client
 func Get[Response any, Request any](
-	client zmodels.ZClient,
+	client *zmodels.ZClient,
 	request zmodels.ZRequest[Request],
 ) zmodels.ZResponse[Response] {
-	utils.PrepareClientRequest(&client, &request)
+	utils.PrepareClientRequest(client, &request)
 
 	return zhttp.Get[Response](request)
 }
 
 // Post function that makes the request using basic information from the given client
 func Post[Response any, Request any](
-	client zmodels.ZClient,
+	client *zmodels.ZClient,
 	request zmodels.ZRequest[Request],
 ) zmodels.ZResponse[Response] {
-	utils.PrepareClientRequest(&client, &request)
+	utils.PrepareClientRequest(client, &request)
 
 	return zhttp.Post[Response](request)
 }
 
 func PostForm[Response any](
-	client zmodels.ZClient,
+	client *zmodels.ZClient,
 	request zmodels.ZRequest[map[string][]string],
 ) zmodels.ZResponse[Response] {
-	utils.PrepareClientRequest(&client, &request)
+	utils.PrepareClientRequest(client, &request)
 
 	return zhttp.PostForm[Response](request)
 }
 
 func Patch[Response any, Request any](
-	client zmodels.ZClient,
+	client *zmodels.ZClient,
 	request zmodels.ZRequest[Request],
 ) zmodels.ZResponse[Response] {
-	utils.PrepareClientRequest(&client, &request)
+	utils.PrepareClientRequest(client, &request)
 
 	return zhttp.Patch[Response](request)
 }
 
 func Put[Response any, Request any](
-	client zmodels.ZClient,
+	client *zmodels.ZClient,
 	request zmodels.ZRequest[Request],
 ) zmodels.ZResponse[Response] {
-	utils.PrepareClientRequest(&client, &request)
+	utils.PrepareClientRequest(client, &request)
 
 	return zhttp.Put[Response](request)
 }
 
 func Delete[Response any, Request any](
-	client zmodels.ZClient,
+	client *zmodels.ZClient,
 	request zmodels.ZRequest[Request],
 ) zmodels.ZResponse[Response] {
-	utils.PrepareClientRequest(&client, &request)
+	utils.PrepareClientRequest(client, &request)
 
 	return zhttp.Delete[Response](request)
 }
