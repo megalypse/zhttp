@@ -43,7 +43,7 @@ func TestHeaderInsertion(t *testing.T) {
 	new := "000"
 
 	client := zmodels.ZClient{
-		Context: "http://hosturl.com/",
+		ContextUrl: "http://hosturl.com/",
 		Headers: map[string]string{
 			"ClientHeader1": "-",
 			"GenericHeader": original,

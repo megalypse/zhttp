@@ -1,6 +1,6 @@
 package zmodels
 
 type ZClient struct {
-	Context string
-	Headers map[string]string
+	ContextUrl string
+	Headers    map[string]string
 }
