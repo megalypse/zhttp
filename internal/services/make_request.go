@@ -12,7 +12,7 @@ import (
 
 // Response can be of any desired type.
 // Request can also be of any type.
-// `MakeRequest` uses "encoding/json" lib, so feel free to use struct tagging on your response and request types
+// `MakeRequest` uses "encoding/json" lib, so feel free to use struct tagging on your response and request types.
 func MakeRequest[Response any, Request any](method string, request zmodels.ZRequest[Request]) zmodels.ZResponse[Response] {
 	if method == "POSTFORM" {
 		converted := any(request).(zmodels.ZRequest[map[string][]string])
