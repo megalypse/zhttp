@@ -13,7 +13,7 @@ import (
 // This function do everything that is needed to the URL url before it is ready
 // to be used.
 func PrepareClientRequest[T any](client *zmodels.ZClient, request *zmodels.ZRequest[T]) {
-	context := client.Context
+	context := client.ContextUrl
 	request.Url = generateRequestUrl(context, request.Url)
 	request.Headers = prepareRequestHeaders(client, request)
 }

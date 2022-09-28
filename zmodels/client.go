@@ -4,6 +4,6 @@ package zmodels
 // Headers: headers to be included in every call made using the client.
 // The headers added on ZRequest have priority over the client ones.
 type ZClient struct {
-	Context string
-	Headers map[string]string
+	ContextUrl string
+	Headers    map[string]string
 }
