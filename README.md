@@ -3,6 +3,13 @@
 It's a simple library that have as its life's purpose making YOUR life easier when doing HTTP requests.
 It supports `Get`, `Post`, `PostForm`, `Patch`, `Put` and `Delete` methods.
 
+## Summary
+* [GET Requests](#get-requests)
+* [POST Requests](#post-requests)
+* [Using URL params](#url-params)
+* [Using Query params](#query-params)
+* [Using a Client](#zclient)
+
 ## Usage
 ### GET Requests
 ```go
