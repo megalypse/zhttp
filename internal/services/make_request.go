@@ -69,9 +69,7 @@ func defaultBehavior[Response any, Request any](method string, request zmodels.Z
 		bytes.NewBuffer(bytesBody),
 	)
 
-	for key, value := range request.Headers {
-		httpRequest.Header.Set(key, value)
-	}
+	setRequestHeaders(&request, httpRequest)
 
 	httpResponse, _ := client.Do(httpRequest)
 
@@ -92,5 +90,15 @@ func defaultBehavior[Response any, Request any](method string, request zmodels.Z
 		Content:   responseHolder,
 		Response:  httpResponse,
 		IsSuccess: statusCode >= 200 && statusCode < 300,
+	}
+}
+
+func setRequestHeaders[T any](request *zmodels.ZRequest[T], httpRequest *http.Request) {
+	for key, value := range request.Headers {
+		httpRequest.Header.Set(key, value)
+	}
+
+	if _, exists := request.Headers["Content-type"]; !exists {
+		httpRequest.Header.Set("Content-type", "application/json")
 	}
 }
