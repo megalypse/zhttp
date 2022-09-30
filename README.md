@@ -1,6 +1,7 @@
 # zhttp
 
 It's a simple library that have as its life's purpose making YOUR life easier when doing HTTP requests.
+It supports `Get`, `Post`, `PostForm`, `Patch`, `Put` and `Delete` methods.
 
 ## Usage
 ### GET Requests
