@@ -73,6 +73,10 @@ func defaultBehavior[Response any, Request any](method string, request zmodels.Z
 		httpRequest.Header.Set(key, value)
 	}
 
+	if _, exists := request.Headers["Content-type"]; !exists {
+		httpRequest.Header.Set("Content-type", "application/json")
+	}
+
 	httpResponse, _ := client.Do(httpRequest)
 
 	responseBuffer, readErr := io.ReadAll(httpResponse.Body)
