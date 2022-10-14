@@ -39,10 +39,16 @@ func postFormBehavior[Response any](request zmodels.ZRequest[map[string][]string
 	json.Unmarshal(body, &responseHolder)
 
 	statusCode := res.StatusCode
+	isSuccess := statusCode >= 200 && statusCode < 300
+
+	if !isSuccess {
+		return utils.MakeFailResponse[Response](string(body), res)
+	}
+
 	return zmodels.ZResponse[Response]{
 		Content:   responseHolder,
 		Response:  res,
-		IsSuccess: statusCode >= 200 && statusCode < 300,
+		IsSuccess: true,
 	}
 }
 
@@ -86,10 +92,16 @@ func defaultBehavior[Response any, Request any](method string, request zmodels.Z
 	}
 
 	statusCode := httpResponse.StatusCode
+	isSuccess := statusCode >= 200 && statusCode < 300
+
+	if !isSuccess {
+		return utils.MakeFailResponse[Response](string(responseBuffer), httpResponse)
+	}
+
 	return zmodels.ZResponse[Response]{
 		Content:   responseHolder,
 		Response:  httpResponse,
-		IsSuccess: statusCode >= 200 && statusCode < 300,
+		IsSuccess: true,
 	}
 }
 
