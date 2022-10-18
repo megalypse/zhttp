@@ -77,7 +77,11 @@ func defaultBehavior[Response any, Request any](method string, request zmodels.Z
 
 	setRequestHeaders(&request, httpRequest)
 
-	httpResponse, _ := client.Do(httpRequest)
+	httpResponse, requestErr := client.Do(httpRequest)
+
+	if requestErr != nil {
+		return utils.MakeFailResponse[Response](requestErr.Error(), nil)
+	}
 
 	responseBuffer, readErr := io.ReadAll(httpResponse.Body)
 
