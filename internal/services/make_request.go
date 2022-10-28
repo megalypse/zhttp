@@ -89,17 +89,19 @@ func defaultBehavior[Response any, Request any](method string, request zmodels.Z
 		return utils.MakeFailResponse[Response](readErr.Error(), nil)
 	}
 
-	unmarshalError := json.Unmarshal(responseBuffer, &responseHolder)
+	if len(responseBuffer) > 0 {
+		unmarshalError := json.Unmarshal(responseBuffer, &responseHolder)
 
-	if unmarshalError != nil {
-		return utils.MakeFailResponse[Response](unmarshalError.Error(), nil)
-	}
+		if unmarshalError != nil {
+			return utils.MakeFailResponse[Response](unmarshalError.Error(), nil)
+		}
 
-	statusCode := httpResponse.StatusCode
-	isSuccess := statusCode >= 200 && statusCode < 300
+		statusCode := httpResponse.StatusCode
+		isSuccess := statusCode >= 200 && statusCode < 300
 
-	if !isSuccess {
-		return utils.MakeFailResponse[Response](string(responseBuffer), httpResponse)
+		if !isSuccess {
+			return utils.MakeFailResponse[Response](string(responseBuffer), httpResponse)
+		}
 	}
 
 	return zmodels.ZResponse[Response]{
