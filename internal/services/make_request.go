@@ -27,13 +27,13 @@ func postFormBehavior[Response any](request zmodels.ZRequest[map[string][]string
 	res, err := http.PostForm(request.Url, request.Body)
 
 	if err != nil {
-		return utils.MakeFailResponse[Response](err.Error(), res)
+		return utils.MakeFailResponse[Response](MakeRequestError+err.Error(), res)
 	}
 
 	body, err := io.ReadAll(res.Body)
 
 	if err != nil {
-		return utils.MakeFailResponse[Response](err.Error(), res)
+		return utils.MakeFailResponse[Response](ResponseBodyReadError+err.Error(), res)
 	}
 
 	json.Unmarshal(body, &responseHolder)
@@ -42,7 +42,7 @@ func postFormBehavior[Response any](request zmodels.ZRequest[map[string][]string
 	isSuccess := statusCode >= 200 && statusCode < 300
 
 	if !isSuccess {
-		return utils.MakeFailResponse[Response](string(body), res)
+		return utils.MakeFailResponse[Response](HttpStatusFailed+string(body), res)
 	}
 
 	return zmodels.ZResponse[Response]{
@@ -63,7 +63,7 @@ func defaultBehavior[Response any, Request any](method string, request zmodels.Z
 		bodyBuffer, marshalErr := json.Marshal(request.Body)
 
 		if marshalErr != nil {
-			return utils.MakeFailResponse[Response](marshalErr.Error(), nil)
+			return utils.MakeFailResponse[Response](RequestBodyMarshalError+marshalErr.Error(), nil)
 		}
 
 		bytesBody = bodyBuffer
@@ -80,27 +80,27 @@ func defaultBehavior[Response any, Request any](method string, request zmodels.Z
 	httpResponse, requestErr := client.Do(httpRequest)
 
 	if requestErr != nil {
-		return utils.MakeFailResponse[Response](requestErr.Error(), nil)
+		return utils.MakeFailResponse[Response](MakeRequestError+requestErr.Error(), nil)
 	}
 
 	responseBuffer, readErr := io.ReadAll(httpResponse.Body)
 
 	if readErr != nil {
-		return utils.MakeFailResponse[Response](readErr.Error(), nil)
+		return utils.MakeFailResponse[Response](ResponseBodyReadError+readErr.Error(), nil)
 	}
 
 	if len(responseBuffer) > 0 {
 		unmarshalError := json.Unmarshal(responseBuffer, &responseHolder)
 
 		if unmarshalError != nil {
-			return utils.MakeFailResponse[Response](unmarshalError.Error(), nil)
+			return utils.MakeFailResponse[Response](ResponseBodyUnmarshalError+unmarshalError.Error(), nil)
 		}
 
 		statusCode := httpResponse.StatusCode
 		isSuccess := statusCode >= 200 && statusCode < 300
 
 		if !isSuccess {
-			return utils.MakeFailResponse[Response](string(responseBuffer), httpResponse)
+			return utils.MakeFailResponse[Response](HttpStatusFailed+string(responseBuffer), httpResponse)
 		}
 	}
 
@@ -120,3 +120,11 @@ func setRequestHeaders[T any](request *zmodels.ZRequest[T], httpRequest *http.Re
 		httpRequest.Header.Set("Content-type", "application/json")
 	}
 }
+
+const (
+	RequestBodyMarshalError    = "[REQUEST BODY MARSHAL ERROR] "
+	MakeRequestError           = "[MAKE REQUEST ERROR] "
+	ResponseBodyReadError      = "[RESPONSE BODY READ ERROR] "
+	ResponseBodyUnmarshalError = "[RESPONSE BODY UNMARSHAL ERROR] "
+	HttpStatusFailed           = "[HTTP STATUS FAILED] "
+)
