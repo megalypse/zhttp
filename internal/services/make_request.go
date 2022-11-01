@@ -89,7 +89,7 @@ func defaultBehavior[Response any, Request any](method string, request zmodels.Z
 		return utils.MakeFailResponse[Response](ResponseBodyReadError+readErr.Error(), nil)
 	}
 
-	if len(responseBuffer) > 0 {
+	if len(responseBuffer) > 0 && !request.IgnoreJsonParsing {
 		unmarshalError := json.Unmarshal(responseBuffer, &responseHolder)
 
 		if unmarshalError != nil {
@@ -105,9 +105,10 @@ func defaultBehavior[Response any, Request any](method string, request zmodels.Z
 	}
 
 	return zmodels.ZResponse[Response]{
-		Content:   responseHolder,
-		Response:  httpResponse,
-		IsSuccess: true,
+		Content:     responseHolder,
+		Response:    httpResponse,
+		IsSuccess:   true,
+		RawResponse: responseBuffer,
 	}
 }
 

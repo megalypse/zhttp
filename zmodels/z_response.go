@@ -7,4 +7,5 @@ type ZResponse[T any] struct {
 	Response     *http.Response
 	IsSuccess    bool
 	ErrorMessage string
+	RawResponse  []byte
 }
