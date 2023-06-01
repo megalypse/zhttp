@@ -3,9 +3,8 @@ package internal
 import (
 	"fmt"
 	"net/http"
-	"strings"
-
 	"net/url"
+	"strings"
 
 	"github.com/megalypse/zhttp/zmodels"
 )
@@ -58,8 +57,7 @@ func ParseUrl[T any](request zmodels.ZRequest[T]) string {
 				isFirstParam = false
 			}
 
-			param += fmt.Sprintf("%v=%v", key, value)
-			param = url.QueryEscape(param)
+			param += fmt.Sprintf("%v=%v", key, url.QueryEscape(value))
 			uri += param
 		}
 
